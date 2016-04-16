@@ -9,5 +9,6 @@ Information Retrieval Course Project
 6. Flight Domain - Cabs, Hotels, Restraurant, Tourist Locations, Weather,  
 7. Hosting service for Theano python
 8. If above tasks completed then implement multiple domain query - Movie Domain, Weather Domain or say any domain.
+9.
 
 
