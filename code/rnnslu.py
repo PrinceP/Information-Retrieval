@@ -278,9 +278,9 @@ def main(param=None):
             'seed': 345,
             'emb_dimension': 50,
             # dimension of word embedding
-            'nepochs': 60,
+            'nepochs': 1,
             # 60 is recommended
-            'savemodel': False}
+            'savemodel': True}
     print(param)
 
     folder_name = os.path.basename(__file__).split('.')[0]
@@ -395,6 +395,7 @@ def main(param=None):
            'valid F1', param['vf1'],
            'best test F1', param['tf1'],
            'with the model', folder)
+    
 
 
 if __name__ == '__main__':
