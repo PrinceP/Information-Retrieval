@@ -25,6 +25,18 @@ PREFIX = os.getenv(
     os.path.join(os.path.split(os.path.abspath(os.path.dirname(__file__)))[0],
                  'data'))
 
+def atisfold(fold):
+    assert fold in range(5)
+    filename = os.path.join(PREFIX, 'atis.fold'+str(fold)+'.pkl.gz')
+    f = gzip.open(filename, 'rb')
+    try:
+        train_set, valid_set, test_set, dicts = pickle.load(f, encoding='latin1')
+    except:
+        train_set, valid_set, test_set, dicts = pickle.load(f)
+    return train_set, valid_set, test_set, dicts
+
+
+
 # utils functions
 def shuffle(lol, seed):
     '''

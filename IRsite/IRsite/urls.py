@@ -18,6 +18,7 @@ from django.conf.urls import *
 from django.contrib import admin
 from RnnView import views
 
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', views.searchterm, name = 'home'),
