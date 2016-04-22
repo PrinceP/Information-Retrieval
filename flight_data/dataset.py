@@ -26,11 +26,6 @@ with open('dataset_excel/csv/Vistara_ss16.csv', 'rb') as csvfile:
 			row.insert(2,source)
 			data.insert(i,row)
 		
-		
-		
-
-		
-
 with open('dataset_excel/csv/output.csv', 'a') as csvfile:
 	writer = csv.writer(csvfile, delimiter=',', quotechar=" ", quoting=csv.QUOTE_MINIMAL)
 
