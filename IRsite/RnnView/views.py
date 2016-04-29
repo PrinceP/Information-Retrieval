@@ -107,7 +107,7 @@ def searchterm(request):
 				duration_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['duration'])
 
 
-					
+
 
 
 
@@ -122,7 +122,7 @@ def searchterm(request):
 
 
 		
-		return render_to_response('search.html', {'result': (finalquery)  } )
+		return render_to_response('search.html', {'result': (fare_data)  } )
 	else:
 		return render_to_response('search.html' ,{'result': None })
 
