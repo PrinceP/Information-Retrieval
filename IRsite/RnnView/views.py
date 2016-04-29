@@ -7,6 +7,7 @@ from django.http import Http404, HttpResponse, HttpResponseRedirect
 from rnnmodel import returnModel,returnDictionary
 import numpy
 from weather import calculateTemp 
+import os
 
 city_name = ['agartala', 'agra', 'ahmedabad', 'allahabad', 'amritsar', 'aurangabad', 'bagdogra', 'bangalore', 'bhavnagar', 'bhopal', 'bhubaneswar', 'bhuj', 'calcutta', 'chandigarh', 'chennai', 'cochin', 'coimbatore', 'daman', 'dehradun', 'dibrugarh', 'dimapur', 'diu', 'gauhati', 'goa', 'gwalior', 'hubli', 'hyderabad', 'imphal', 'indore', 'jaipur', 'jammu', 'jamnagar', 'jamshedpur', 'jodhpur', 'jorhat', 'kanpur', 'khajuraho', 'kozhikode', 'leh', 'lucknow', 'ludhiana', 'madurai', 'mangalore', 'mumbai', 'nagpur', 'nanded', 'nasik', 'patna', 'pondicherry', 'pune', 'porbandar', 'puttaparthi', 'rajkot', 'ranchi', 'shillong', 'silchar', 'srinagar', 'surat', 'tezpur', 'tiruchirapally', 'tirupati', 'trivandrum', 'udaipur', 'vadodara', 'varanasi', 'vijayawada', 'vishakhapatnam', 'new delhi', 'port blair', 'rae bareli']
 rnn = returnModel()
@@ -61,6 +62,22 @@ def searchterm(request):
 
 #home page
 def welcome(request):
+	'''
+	Ankita Code begin
+	'''
+	city = 'Delhi'
+	path = '../data/HotelTourismData-3/Sheet1-Table_1_append.csv'
+	fp = open(path,'r')
+	hotel = []
+	for line in iter(fp):
+		x = line.strip().split(',')
+		print x[1],
+		if(x[1].strip().lower()==city.strip().lower()):
+			hotel.append(x)
+	output = hotel
+	'''
+	Ankita Code end
+	'''
 	temp = calculateTemp()
 	if request.POST:
 		array = []
@@ -75,9 +92,6 @@ def welcome(request):
 				if z.lower() in city_name:
 					array.append(88)
 
-
-		
-
 		query = numpy.asarray(array).astype('int32')
 		prediction = rnn.classify(contextwin(query,7))
 		#print prediction
@@ -86,11 +100,11 @@ def welcome(request):
 			key = dicts['labels2idx'].keys()[dicts['labels2idx'].values().index(x)]
 			array.append(key)
 		finalquery = '   '.join(array)
-		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': (finalquery)})
+		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': (finalquery), 'city': (output)})
 	else:
-		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': None })
+		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': None, 'city': (output) })
 
 
 
 
-	return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"])})
+	return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'city': (output)})
