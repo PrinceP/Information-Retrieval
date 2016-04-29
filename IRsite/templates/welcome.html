@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1.0">
-  <title>Weather App</title>
+  <title>Personalised Travel Search</title>
   <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700,inherit,400" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="static/css/standardize.css">
   <link rel="stylesheet" href="static/css/index.css">
@@ -43,8 +43,18 @@
     weather data
     </div>
     <div class="col-xs-6 clearfix pull-right">
-      hotel data
-      <div id="map" style="border: 2px solid black; height: 500px;">
+      <dl>
+        {% for h in city %}
+          <dt>{{ h.0 }}</dt>
+          <dd> {% if h|length > 7 %}
+                  {% for i in h %}
+                          <dd>{{ h.i }}</dd>
+                  {% endfor %}
+               {% endif %}
+          </dd>
+        {% endfor %}
+      </dl>
+      <div id="map" style="border: 2px solid black; height: 300px;">
       <script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSjtspJA69v6m_8yfqcUE7f5zQa8baTwY
           &libraries=visualization&callback=initMap">
@@ -53,13 +63,6 @@
     </div>
   </div>
 </div>
-
-
-
-
-
-
-
   <!-- <div class="container clearfix">
     <p class="location"></p>
     <p class="temperature">{{ temp }}</p>

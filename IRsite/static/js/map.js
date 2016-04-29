@@ -5,10 +5,10 @@ function initMap() {
     zoom: 3,
     styles: [{
       featureType: 'poi',
-      stylers: [{ visibility: 'off' }]  // Turn off points of interest.
+      stylers: [{ visibility: 'on' }]  // Turn off points of interest.
     }, {
       featureType: 'transit.station',
-      stylers: [{ visibility: 'off' }]  // Turn off bus stations, train stations, etc.
+      stylers: [{ visibility: 'on' }]  // Turn off bus stations, train stations, etc.
     }],
     disableDoubleClickZoom: true
   });
@@ -18,5 +18,7 @@ function initMap() {
       map: map
     });
     firebase.push({lat: e.latLng.lat(), lng: e.latLng.lng()});
+    var message = snapshot.val();
+    var id = snapshot.key();
   });
 }
