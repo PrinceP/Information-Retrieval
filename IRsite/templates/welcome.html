@@ -24,7 +24,7 @@
 </head>
 <body>
 <div class="container" style="margin:auto auto;">
-  <div class="row" >
+  <div class="row jumbotron">
     <form class="form-inline classCentred" action="/" method="post">
       <div class="form-group" >
         <label for="exampleInputName2">Type Your Query</label>
@@ -38,13 +38,24 @@
          <hr>
       {% endif %}
   </div>
-  <div class="row weather" classCentred>
-    <div class="col-xs-6 clearfix">
-    weather data
+  <div class="row" classCentred>
+    <div class="col-xs-5 clearfix weatherbody" style="height:400px;border:2px solid black;">
+      <div class="weathercontainer">
+        <p class="weatherlocation"></p>
+        <p class="weathertemperature">{{ temp }}</p>
+        <div class="weatherclimate_bg"><img class="weatherdropicon" src="static/images/Sun.svg"></div>
+        <div class="weatherinfo_bg">
+          <img class="weatherdropicon" src="static/images/Droplet.svg">
+          <p class="weatherhumidity">{{humidity}}</p>
+
+          <img class="weatherwindicon" src="static/images/Wind.svg">
+          <div class="weatherwindspeed"></div>
+          </div>
+      </div>
     </div>
-    <div class="col-xs-6 clearfix pull-right">
+    <div class="col-xs-7 clearfix pull-right" >
       hotel data
-      <div id="map" style="border: 2px solid black; height: 500px;">
+      <div id="map" style="border: 2px solid black; height: 450px;">
       <script async defer
           src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSjtspJA69v6m_8yfqcUE7f5zQa8baTwY
           &libraries=visualization&callback=initMap">
