@@ -8,15 +8,26 @@
   <link rel="stylesheet" href="static/css/standardize.css">
   <link rel="stylesheet" href="static/css/index.css">
   <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
   <script src="static/js/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
+  <script src="static/js/map.js"> </script><style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 100%; }
+      .classCentred {
+        border: 2px solid black;
+        height: 200px; 
+        width: 100%; text-align:center; padding-top: 100px; left: 50%; margin-right: -50%;
+      }
+  </style>
+
 </head>
 <body>
 <div class="container" style="margin:auto auto;">
-  <div class="row">
-    <form class="form-inline" action="/" method="post">
-      <div class="form-group">
-        <label for="exampleInputName2">Name</label>
+  <div class="row" >
+    <form class="form-inline classCentred" action="/" method="post">
+      <div class="form-group" >
+        <label for="exampleInputName2">Type Your Query</label>
         <input type="text" class="form-control" name="term" id="exampleInputName2" placeholder="name" />
       </div>
       <input type="submit" value="Search" />
@@ -27,12 +38,18 @@
          <hr>
       {% endif %}
   </div>
-  <div class="row weather">
+  <div class="row weather" classCentred>
     <div class="col-xs-6 clearfix">
     weather data
     </div>
     <div class="col-xs-6 clearfix pull-right">
       hotel data
+      <div id="map" style="border: 2px solid black; height: 500px;">
+      <script async defer
+          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSjtspJA69v6m_8yfqcUE7f5zQa8baTwY
+          &libraries=visualization&callback=initMap">
+      </script>
+      </div>
     </div>
   </div>
 </div>
