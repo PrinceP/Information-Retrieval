@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1.0">
+  <title>Weather App</title>
+  <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700,inherit,400" rel="stylesheet" type="text/css">
+  <link rel="stylesheet" href="static/css/standardize.css">
+  <link rel="stylesheet" href="static/css/index.css">
+  <link rel="stylesheet" href="static/css/bootstrap.min.css">
+  <script src="static/js/jquery.js"></script>
+  <script src="static/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div class="container" style="margin:auto auto;">
+  <div class="row">
+    <form class="form-inline" action="/" method="post">
+      <div class="form-group">
+        <label for="exampleInputName2">Name</label>
+        <input type="text" class="form-control" name="term" id="exampleInputName2" placeholder="name" />
+      </div>
+      <input type="submit" value="Search" />
+    </form>
+      {% if result %}
+         <hr>
+        {{ result }}
+         <hr>
+      {% endif %}
+  </div>
+  <div class="row weather">
+    <div class="col-xs-6 clearfix">
+    weather data
+    </div>
+    <div class="col-xs-6 clearfix pull-right">
+      hotel data
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+  <!-- <div class="container clearfix">
+    <p class="location"></p>
+    <p class="temperature">{{ temp }}</p>
+    <div class="climate_bg"><img class="dropicon" src="static/images/Sun.svg"></div>
+    <div class="info_bg">
+      <img class="dropicon" src="static/images/Droplet.svg">
+      <p class="humidity">{{humidity}}</p>
+
+      <img class="windicon" src="static/images/Wind.svg">
+      <div class="windspeed"></div>
+    </div>
+  </div> -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.0.2/jquery.simpleWeather.min.js"></script>
+<!-- <script type="text/javascript" src="js/weather.js"></script> -->
+
+
+</body>
+</html>
