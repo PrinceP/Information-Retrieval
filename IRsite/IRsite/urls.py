@@ -21,5 +21,6 @@ from RnnView import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^', views.searchterm, name = 'home'),
+    # url(r'^', views.searchterm, name = 'home'),
+    url(r'^', views.welcome, name = 'welcome'),
 ]

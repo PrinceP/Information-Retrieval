@@ -3,10 +3,9 @@
 <input type="submit" value="Search">
 </form>
 <hr>
-<ul>
-{% for a in a_list %}
-    <li>{{ a.name }}</li>
-{% endfor %}
-</ul>
-
+ {% if result %}
+         <hr>
+        {{ result }}
+         <hr>
+      {% endif %}
 <hr>
