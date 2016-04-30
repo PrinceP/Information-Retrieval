@@ -71,7 +71,6 @@ def welcome(request):
 	hotel = []
 	for line in iter(fp):
 		x = line.strip().split(',')
-		print x[1],
 		if(x[1].strip().lower()==city.strip().lower()):
 			hotel.append(x)
 	output = hotel

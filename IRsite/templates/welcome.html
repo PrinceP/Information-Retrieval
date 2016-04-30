@@ -3,6 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1.0">
+  <meta name="google-signin-client_id" content="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com">
+
+  <meta name="google-signin-scope" content="profile email">
+  <meta name="google-signin-client_id" content="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com">
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
   <title>Personalised Travel Search</title>
   <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700,inherit,400" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="static/css/standardize.css">
@@ -24,6 +29,17 @@
 </head>
 <body>
 <div class="container" style="margin:auto auto;">
+  
+  <div class="row pull-right">
+
+
+  <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <a href="#" onclick="signOut();">Sign out</a>
+  </div>
+
+  
+
   <div class="row jumbotron">
     <form class="form-inline classCentred" action="/" method="post">
       <div class="form-group" >
@@ -74,22 +90,33 @@
     </div>
   </div>
 </div>
-  <!-- <div class="container clearfix">
-    <p class="location"></p>
-    <p class="temperature">{{ temp }}</p>
-    <div class="climate_bg"><img class="dropicon" src="static/images/Sun.svg"></div>
-    <div class="info_bg">
-      <img class="dropicon" src="static/images/Droplet.svg">
-      <p class="humidity">{{humidity}}</p>
-
-      <img class="windicon" src="static/images/Wind.svg">
-      <div class="windspeed"></div>
-    </div>
-  </div> -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.0.2/jquery.simpleWeather.min.js"></script>
-<!-- <script type="text/javascript" src="js/weather.js"></script> -->
 
+<script>
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile();
+  // console.log(profile)
+  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
+  console.log('Name: ' + profile.getName());
+  console.log('Image URL: ' + profile.getImageUrl());
+  console.log('Email: ' + profile.getEmail());
+  console.log('Full Name: ' + profile.getName());
+  console.log('Given Name: ' + profile.getGivenName());
+  console.log('Family Name: ' + profile.getFamilyName());
+  var id_token = googleUser.getAuthResponse().id_token;
+  console.log("ID Token: " + id_token);
+  // console.log(profile);
+}
+
+
+function signOut() {
+    var auth2 = gapi.auth2.getAuthInstance();
+    auth2.signOut().then(function () {
+      console.log('User signed out.');
+    });
+  }
+</script>
 
 </body>
 </html>
