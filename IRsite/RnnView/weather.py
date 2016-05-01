@@ -23,6 +23,7 @@ def callCurl():
 
 def calculateTemp():
 	temp = callCurl()
+	# print temp
 	json1_data = json.loads(temp)
 
 

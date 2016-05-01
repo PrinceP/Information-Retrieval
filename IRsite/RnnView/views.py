@@ -13,7 +13,8 @@ city_name = ['agartala', 'agra', 'ahmedabad', 'allahabad', 'amritsar', 'aurangab
 rnn = returnModel()
 dicts = returnDictionary()
 
-
+def posthere(request):
+	print 'hello'
 
 def contextwin(l, win):
 	assert (win % 2) == 1

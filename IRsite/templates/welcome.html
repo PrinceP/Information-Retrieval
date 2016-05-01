@@ -7,7 +7,7 @@
 
   <meta name="google-signin-scope" content="profile email">
   <meta name="google-signin-client_id" content="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com">
-    <script src="https://apis.google.com/js/platform.js" async defer></script>
+  <script src="https://apis.google.com/js/platform.js" async defer></script>
   <title>Personalised Travel Search</title>
   <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700,inherit,400" rel="stylesheet" type="text/css">
   <link rel="stylesheet" href="static/css/standardize.css">
@@ -16,7 +16,9 @@
   <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
   <script src="static/js/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
-  <script src="static/js/map.js"> </script><style type="text/css">
+  <script src="static/js/map.js"> </script>
+  <script src = "https://plus.google.com/js/client:platform.js" async defer></script>
+  <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
       #map { height: 100%; }
       .classCentred {
@@ -30,20 +32,36 @@
 <body>
 <div class="container" style="margin:auto auto;">
   
-  <div class="row pull-right">
+  <div class="row pull-right" style="padding:10px;">
 
 
-  <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+  <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
     <script src="https://apis.google.com/js/platform.js" async defer></script>
     <a href="#" onclick="signOut();">Sign out</a>
+  </div> -->
+
+
+  <div id="gConnect" class="button">
+    <button class="g-signin"
+        data-scope = "email"; 
+        data-clientid="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com"
+        data-callback="signInCallback"
+        data-theme="dark"
+        data-cookiepolicy="single_host_origin">
+    </button>
   </div>
 
-  
+  <div id="gLogout" style="display:none">
+    <button type = "button" class = "btn btn-danger" onclick="signOut();">sign out</button>
+    <!-- <a class="btn-success" href="#" onclick="signOut();">Logout</a> -->
+  </div>
+
+</div>
 
   <div class="row jumbotron">
     <form class="form-inline classCentred" action="/" method="post">
       <div class="form-group" >
-        <label for="exampleInputName2">Type Your Query</label>
+        <label for="exampleInputName2" >Type Your Query</label>
         <input type="text" class="form-control" name="term" id="exampleInputName2" placeholder="name" />
       </div>
       <input type="submit" value="Search" />
@@ -90,10 +108,14 @@
     </div>
   </div>
 </div>
+</body>
+</html>
+
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.0.2/jquery.simpleWeather.min.js"></script>
 
-<script>
+<script type="text/javascript">
+var respObj;
 function onSignIn(googleUser) {
   var profile = googleUser.getBasicProfile();
   // console.log(profile)
@@ -110,13 +132,96 @@ function onSignIn(googleUser) {
 }
 
 
+function signInCallback(resp) {
+    respObj = resp;
+    if (resp["status"]["google_logged_in"] && resp["status"]["method"] == "PROMPT") {
+      console.log("logged in with prompt mode");
+      $("#gConnect").hide();
+      $("#gLogout").show();
+
+    } else if (resp["status"]["google_logged_in"] && resp["status"]["method"] == "AUTO") {
+      console.log("logged in with auto mode");
+      $("#gConnect").hide();
+      $("#gLogout").show();
+    } else {
+      console.log("not logged in");
+      $("#gConnect").show();
+      $("#gLogout").hide();
+    }
+    gapi.client.load('plus', 'v1', apiClientLoaded);
+    
+    // if (resp['status']['signed_in'] && resp['status']['method'] == 'PROMPT') {
+    //   // User clicked on the sign in button. Do your staff here.
+    //   console.log("logged in");
+    // } else if (resp['status']['signed_in']) {
+    //   console.log("handle this case")
+    //     // This is called when user is signed in to Google but hasn't clicked on the button.
+    // } else {
+    //     console.log('Sign-in state: ' + resp['error']);
+    // }
+}
+
+function apiClientLoaded() {
+  console.log("apiClientLoaded");
+    gapi.client.plus.people.get({userId: 'me'}).execute(handleEmailResponse);
+}
+
+function handleEmailResponse(resp) {
+    var primaryEmail;
+    // JSON.stringify(resp);
+    if(respObj['status']['signed_in']) {
+      
+      writeToFile(JSON.stringify(resp));
+    }
+    
+}
+
 function signOut() {
-    var auth2 = gapi.auth2.getAuthInstance();
-    auth2.signOut().then(function () {
-      console.log('User signed out.');
-    });
-  }
+    // gapi.auth.signOut();
+    $.ajax({
+      type: 'GET',
+      url: 'https://accounts.google.com/o/oauth2/revoke?token=' +
+          gapi.auth.getToken().access_token,
+      async: false,
+      contentType: 'application/json',
+      dataType: 'jsonp',
+      success: function(result) {
+        console.log('revoke response: ' + result);
+        $('#authOps').hide();
+        $('#profile').empty();
+        $('#visiblePeople').empty();
+        $('#authResult').empty();
+        $('#gConnect').show();
+      },
+      error: function(e) {
+        console.log(e);
+      }
+  });
+  $("#gConnect").show();
+  $("#gLogout").hide();  
+}
+
+
+function writeToFile(resp) {
+  console.log(resp);
+
+  // $.ajax({
+  //     url: "/static/ajaxpost.py",
+  //     type: "POST",
+  //     datatype: "json",
+  //     cache: 'false',
+  //     async: 'true',
+  //     data: {foo: 'bar', bar: 'foo'},
+  //     // data: {'resp':resp},
+  //     success: function(response){
+  //         console.log("success");
+  //         console.log(response);
+  //     },
+  //     error: function(response) {
+  //         console.log("error");
+  //         console.log(response);
+  //     }                                                         
+  // });
+}
 </script>
 
-</body>
-</html>
