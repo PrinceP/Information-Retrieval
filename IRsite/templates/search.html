@@ -3,11 +3,9 @@
 <input type="submit" value="Search">
 </form>
 <hr>
-
-{% if result %}
-	
-	{{ result }}
-	
-{% endif %}
-
+ {% if result %}
+         <hr>
+        {{ result }}
+         <hr>
+      {% endif %}
 <hr>

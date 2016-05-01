@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
 <head>
+
   <meta charset="utf-8">
   <meta name="viewport" content="initial-scale=1.0">
   <meta name="google-signin-client_id" content="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com">
@@ -16,7 +17,8 @@
   <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
   <script src="static/js/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
-  <script src="static/js/map1.js"> </script><style type="text/css">
+  <script src="static/js/map1.js"> </script>
+  <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
       #map { height: 100%; }
       .classCentred {
@@ -24,7 +26,17 @@
         height: 200px; 
         width: 100%; text-align:center; padding-top: 100px; left: 50%; margin-right: -50%;
       }
-  </style>
+ </style>
+ <style type="text/css">
+  .container1 {position:relative;}
+  .row1 {clear: both;}
+  .row1 div {float: left; width: 75px; margin-bottom: 20px}
+
+  .header1 .row1{ /*position: fixed;*/ background: #E0D8E0;}
+  .table1 { height: 100%; overflow-y: auto; overflow-x: hidden}
+
+
+ </style>
 
 </head>
 <body>
@@ -40,20 +52,65 @@
 
   
 
-  <div class="row jumbotron">
-    <form class="form-inline classCentred" action="/" method="post">
+  <div class="row ">
+    <form role="form" action="/" method="post">
       <div class="form-group" >
-        <label for="exampleInputName2">Type Your Query</label>
-        <input type="text" class="form-control" name="term" id="exampleInputName2" placeholder="name" />
+        <input type="text" class="form-control" name="term" id="exampleInputName2" placeholder="Spoken Language Query" />
       </div>
-      <input type="submit" value="Search" />
-    </form>
-      {% if result %}
-         <hr>
-        {{ result }}
-         <hr>
-      {% endif %}
-  </div>
+      </form>
+
+  </div>      
+    <div class="row">
+      <!-- For the list of Flights-->
+      
+      {% if total_data %}
+      <div class="container1">
+        <table class="table table-hover">
+         <div class="header1">
+        <thead>
+        <div class="row1">
+        <tr>
+        <th> Fares</th>
+        <th> Airports</th>
+        <th> Airway</th>
+        <th> Start</th>
+        <th> End</th>
+      
+        </tr>
+        </div> 
+        </thead>
+      </div>
+
+       {% for item in total_data %}
+      <div class="table1">
+      <tbody>
+        <div class="row1">
+         
+        {% if item %}
+        <tr>
+        <td>{{ item.fare }}</td>
+        <td>{{ item.from }} - {{ item.to }}</td>
+        <td>{{ item.brand }}</td>
+        <td>{{ item.endtime }}</td>
+        <td>{{ item.starttime }}</td>
+        </tr>
+        </div>
+        {% endif %}
+      </tbody>
+      </div>
+      {% endfor %}
+      </table>
+      {% endif  %}
+      </div>
+            
+      </div>
+      
+
+
+
+
+
+
   <div class="row" classCentred>
     <div class="col-xs-5 clearfix weatherbody" style="height:400px;border:2px solid black;">
       <div class="weathercontainer">
@@ -146,6 +203,13 @@ function signOut() {
     });
   }
 </script>
+<script type="text/javascript">
+  $('.table > tbody > tr').click(function() {
+  window.open("http://makemytrip.com", '_blank');
+  });
+    
+</script>
+
 
 </body>
 </html>
