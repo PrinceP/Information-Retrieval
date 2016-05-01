@@ -18,7 +18,4 @@ data = cgi.FieldStorage()
 # print "<br />"
 # print data
 
-target = open("sample.txt, 'w')
-target.write("hello")
-target.close()
 

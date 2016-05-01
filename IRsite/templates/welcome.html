@@ -17,12 +17,9 @@
   <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
   <script src="static/js/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
-<<<<<<< HEAD
   <script src="static/js/map.js"> </script>
   <script src = "https://plus.google.com/js/client:platform.js" async defer></script>
-=======
   <script src="static/js/map1.js"> </script>
->>>>>>> 73067b1d900dff4e2d299d72182b5c1566e06b1b
   <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
       #map { height: 100%; }
@@ -33,12 +30,25 @@
       }
  </style>
  <style type="text/css">
-  .container1 {position:relative;}
+  .container1 {
+    /*position:relative;*/
+    overflow: scroll;
+    height: 200px;
+  }
   .row1 {clear: both;}
-  .row1 div {float: left; width: 75px; margin-bottom: 20px}
+  .row1 div {
+    float: left; 
+    width: 75px; 
+    margin-bottom: 20px
+  }
 
-  .header1 .row1{ /*position: fixed;*/ background: #E0D8E0;}
-  .table1 { height: 100%; overflow-y: auto; overflow-x: hidden}
+  .header1 .row1{ /*position: fixed;*/ 
+    background: #E0D8E0;
+  }
+  .table1 { 
+    /*height: 100px; */
+    
+  }
 
 
  </style>
@@ -46,7 +56,6 @@
 </head>
 <body>
 <div class="container" style="margin:auto auto;">
-  
   <div class="row pull-right" style="padding:10px;">
 
 
@@ -77,49 +86,47 @@
     <form role="form" action="/" method="post">
       <div class="form-group" >
         <input type="text" class="form-control" name="term" id="exampleInputName2" placeholder="Spoken Language Query" />
+        <input type="hidden" name="profile" id="userprofile" value=""/>
       </div>
       </form>
 
   </div>      
-    <div class="row">
+    <div class="row flightresult" >
       <!-- For the list of Flights-->
-      
       {% if total_data %}
       <div class="container1">
         <table class="table table-hover">
-         <div class="header1">
-        <thead>
-        <div class="row1">
-        <tr>
-        <th> Fares</th>
-        <th> Airports</th>
-        <th> Airway</th>
-        <th> Start</th>
-        <th> End</th>
-      
-        </tr>
-        </div> 
-        </thead>
-      </div>
-
-       {% for item in total_data %}
-      <div class="table1">
-      <tbody>
-        <div class="row1">
-         
-        {% if item %}
-        <tr>
-        <td>{{ item.fare }}</td>
-        <td>{{ item.from }} - {{ item.to }}</td>
-        <td>{{ item.brand }}</td>
-        <td>{{ item.endtime }}</td>
-        <td>{{ item.starttime }}</td>
-        </tr>
+        <div class="header1">
+          <thead>
+          <div class="row1">
+          <tr>
+          <th> <b>Fares</b></th>
+          <th> Airports</th>
+          <th> Airway</th>
+          <th> Start</th>
+          <th> End</th>
+          </tr>
+          </div> 
+          </thead>
         </div>
-        {% endif %}
+        <div class="table1">
+       {% for item in total_data %}
+      
+        <tbody>
+          <div class="row1">
+          {% if item %}
+          <tr>
+          <td>{{ item.fare }}</td>
+          <td>{{ item.from }} - {{ item.to }}</td>
+          <td>{{ item.brand }}</td>
+          <td>{{ item.endtime }}</td>
+          <td>{{ item.starttime }}</td>
+          </tr>
+          </div>
+          {% endif %}
       </tbody>
-      </div>
       {% endfor %}
+      </div>
       </table>
       {% endif  %}
       </div>
@@ -132,12 +139,12 @@
 
 
 
-  <div class="row" classCentred>
+  <div class="row" classCentred style="padding-top:30px;">
     <div class="col-xs-5 clearfix weatherbody" style="height:210px;width:50%; background: white">
       <div class="weathercontainer" style="height: 210px ; width: 50%">
-        <p class="weatherlocation"></p>
+        <p class="weatherlocation">{{ city }}</p>
         <p class="weathertemperature">{{ temp }}</p>
-        <div class="weatherclimate_bg"><img class="weatherdropicon" src="static/images/Sun.svg"></div>
+        <!-- <div class="weatherclimate_bg"><img class="weatherdropicon" src="static/images/Sun.svg"></div> -->
         <div class="weatherinfo_bg">
           <img class="weatherdropicon" src="static/images/Droplet.svg">
           <p class="weatherhumidity">{{humidity}}</p>
@@ -261,7 +268,9 @@ function handleEmailResponse(resp) {
     // JSON.stringify(resp);
     if(respObj['status']['signed_in']) {
       
-      writeToFile(JSON.stringify(resp));
+      $("#userprofile").val(JSON.stringify(resp));
+      console.log(JSON.stringify(resp))
+      // writeToFile(JSON.stringify(resp));
     }
     
 }
