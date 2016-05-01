@@ -65,13 +65,13 @@ def welcome(request):
 	'''
 	Ankita Code begin
 	'''
-	city = 'Delhi'
-	path = '../data/HotelTourismData-3/Sheet1-Table_1_append.csv'
+	city = 'DElhi'
+	path = '../data/HotelTourismData-3/Sheet1-Table_1_append32.csv'
 	fp = open(path,'r')
 	hotel = []
 	for line in iter(fp):
 		x = line.strip().split(',')
-		if(x[1].strip().lower()==city.strip().lower()):
+		if(x[0].strip().lower()==city.strip().lower()):
 			hotel.append(x)
 	output = hotel
 	'''
