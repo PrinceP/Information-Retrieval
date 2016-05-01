@@ -27,16 +27,10 @@
         width: 100%; text-align:center; padding-top: 100px; left: 50%; margin-right: -50%;
       }
  </style>
- <style type="text/css">
-  .container1 {position:relative;}
-  .row1 {clear: both;}
-  .row1 div {float: left; width: 75px; margin-bottom: 20px}
+ 
+ 
+ 
 
-  .header1 .row1{ /*position: fixed;*/ background: #E0D8E0;}
-  .table1 { height: 100%; overflow-y: auto; overflow-x: hidden}
-
-
- </style>
 
 </head>
 <body>
@@ -60,15 +54,16 @@
       </form>
 
   </div>      
-    <div class="row">
       <!-- For the list of Flights-->
-      
+      <div class="row">
+      {% if noflight %}
+      <br>
+      <p style="text-align: center;"><b>No FLIGHTS !!!! Sorry<b></p>
+      <br>
+      {% endif %}
       {% if total_data %}
-      <div class="container1">
-        <table class="table table-hover">
-         <div class="header1">
+        <table class="table table-striped">
         <thead>
-        <div class="row1">
         <tr>
         <th> Fares</th>
         <th> Airports</th>
@@ -77,14 +72,10 @@
         <th> End</th>
       
         </tr>
-        </div> 
         </thead>
-      </div>
-
+      
        {% for item in total_data %}
-      <div class="table1">
       <tbody>
-        <div class="row1">
          
         {% if item %}
         <tr>
@@ -94,14 +85,11 @@
         <td>{{ item.endtime }}</td>
         <td>{{ item.starttime }}</td>
         </tr>
-        </div>
         {% endif %}
       </tbody>
-      </div>
       {% endfor %}
       </table>
       {% endif  %}
-      </div>
             
       </div>
       
@@ -209,6 +197,12 @@ function signOut() {
   window.open("http://makemytrip.com", '_blank');
   });
     
+</script>
+
+<script>
+$(document).ready(function(){
+    $('#myTable').dataTable();
+});
 </script>
 
 

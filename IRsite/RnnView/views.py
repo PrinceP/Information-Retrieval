@@ -50,6 +50,7 @@ def analysis(originalquery,finalquery):
 	time_relative = None
 	time_nu = None
 	time_period = None
+	time_tom = None
 
 
 
@@ -114,11 +115,19 @@ def analysis(originalquery,finalquery):
 			time_spec_date = originalquery[i]
 			time_spec_date = w2n.word_to_num(time_spec_date)
 
+		if finalquery[i] == 'B-depart_date.today_relative':
+			time_tom = originalquery[i]
 
 
 
 
-				
+
+
+	if time_tom is not None:
+		if time_tom == 'tomorrow':
+			date_tom = datetime.now()+ relativedelta(days=1)
+			par3 = date_tom.strftime('%Y-%m-%d')
+
 
 
 
@@ -157,7 +166,7 @@ def analysis(originalquery,finalquery):
 
 				
 	flight_data  =  makeparameters(fromcity,tocity,par3,par4)
-	return flight_data,time_period,time_relative,time_nu
+	return flight_data,time_period,time_relative,time_nu,tocity
 	
 				
 
@@ -259,8 +268,8 @@ def welcome(request):
 			key = dicts['labels2idx'].keys()[dicts['labels2idx'].values().index(x)]
 			array.append(key)
 		finalquery = '   '.join(array)
-		d,time_period,time_relative,time_nu = analysis(originalquery,array)
-		#print d
+		d,time_period,time_relative,time_nu, tocity = analysis(originalquery,array)
+		print d
 		fare_data = []
 		fromcity_data = []
 		tocity_data = []
@@ -270,39 +279,47 @@ def welcome(request):
 		
 		fromtime_data = []
 		totime_data = []
+		try:
 
-		for i in range(0,len(d['trips']['tripOption'])):
-			fare_data.append(d['trips']['tripOption'][i]['saleTotal'])
-			dicti = d['trips']['data']['carrier']
+			for i in range(0,len(d['trips']['tripOption'])):
+				fare_data.append(d['trips']['tripOption'][i]['saleTotal'])
+				dicti = d['trips']['data']['carrier']
 			
-			for j in range(0,len(d['trips']['tripOption'][i]['slice'])):
-				fromcity_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['origin'])
-				tocity_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['destination'])
-				duration = (d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['duration'])
-				duration =str(duration)
-				if len(duration) == 3:
-					duration = duration[0]+'H'+duration[1:]+'M'
-				elif len(duration) == 4:
-					duration = duration[0:2]+'H'+duration[2:]+'M'
-				duration_data.append(duration)	
+				for j in range(0,len(d['trips']['tripOption'][i]['slice'])):
+					fromcity_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['origin'])
+					tocity_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['destination'])
+					duration = (d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['duration'])
+					duration =str(duration)
+					if len(duration) == 3:
+						duration = duration[0]+'H'+duration[1:]+'M'
+					elif len(duration) == 4:
+						duration = duration[0:2]+'H'+duration[2:]+'M'
+					duration_data.append(duration)	
 				 	
 				
-				m = d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['arrivalTime'].split('T')
-				m[1] = m[1][0:5]
-				m = m[0] +'   '+m[1]
-				fromtime_data.append(m)
-				n = d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['departureTime'].split('T')
-				n[1] = n[1][0:5]
-				n = n[0] + '  '+n[1]
-				totime_data.append(n)
+					m = d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['arrivalTime'].split('T')
+					m[1] = m[1][0:5]
+					m = m[0] +'   '+m[1]
+					fromtime_data.append(m)
+					n = d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['departureTime'].split('T')
+					n[1] = n[1][0:5]
+					n = n[0] + '  '+n[1]
+					totime_data.append(n)
 
 
-				name = d['trips']['tripOption'][i]['slice'][j]['segment'][0]['flight']['carrier']
-				for x in dicti:
-					if x['code'] == name:
-						brandname = x['name']
+					name = d['trips']['tripOption'][i]['slice'][j]['segment'][0]['flight']['carrier']
+					for x in dicti:
+						if x['code'] == name:
+							brandname = x['name']
 
-				airbrand_data.append(brandname)
+					airbrand_data.append(brandname)
+		
+
+		except KeyError:
+			pass 
+					
+
+
 		m = -1		
 		if time_nu is not None:
 			time_nu = time_nu.split()
@@ -365,21 +382,12 @@ def welcome(request):
 			tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
 			
 			total_data.append(tot)
-		
-
-
-
-
-
-
-
-		
-
-
-		output = code_city[tocity_data[0]]
-		print output
-		
-		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': (finalquery), 'total_data':(total_data), 'city': (output)})
+		noflight = None	
+		if len(total_data) == 0 :
+			noflight = 1	
+		temp = calculateTemp(tocity)	
+			
+		return render_to_response('welcome.html',{'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'noflight':(noflight) , 'result': (finalquery), 'total_data':(total_data), 'city': (output)})
 	else:
 		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': None, 'city': (output) })
 
