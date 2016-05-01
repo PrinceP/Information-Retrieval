@@ -19,6 +19,15 @@ rnn = returnModel()
 dicts_words = returnDictionary()
 dicts = returnDictionaryOriginal()
 
+import time
+from datetime import datetime
+from dateutil.relativedelta import relativedelta
+
+from word2number import w2n
+
+def month_converter(month):
+    months = ['january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december']
+    return months.index(month.lower()) + 1
 
 
 
@@ -26,9 +35,17 @@ def analysis(originalquery,finalquery):
 
 	fromcity = None
 	tocity = None
-	par3 = "2016-05-06"
+	par3 = (time.strftime("%Y-%m-%d"))
 	par4 = None
+	time_day = None
+	time_relative = None
+	time_nu = None
+	time_period = None
 
+
+
+	time_spec_month = None 
+	time_spec_date = None
 	
 	for i in range(0,len(finalquery) ):
 		if finalquery[i] == 'B-fromloc.city_name':
@@ -48,14 +65,90 @@ def analysis(originalquery,finalquery):
 					tocity = tocity + ' ' + originalquery[i+1]
 			except IndexError:
 				pass
+			
+	#print fromcity,tocity
+		if finalquery[i] =='B-depart_date.day_name':
+			time_day = originalquery[i]
+
+		if finalquery[i] == 'B-depart_time.time_relative':
+			time_relative = originalquery[i]
+
+		if finalquery[i] == 'B-depart_time.time':
+			time_nu = originalquery[i]
 			try:
-				tocity = tocity + ' ' + originalquery[i+1]
+				if finalquery[i+1] == 'I-depart_time.time':
+					time_nu = time_nu + ' ' + originalquery[i+1]
 			except IndexError:
 				pass
-	print fromcity,tocity
+			try:
+				time_nu = time_nu + ' ' + originalquery[i+1]
+			except IndexError:
+				pass
+		if finalquery[i] == 'B-arrive_time.period_of_day':
+			time_period = originalquery[i]
+			try:
+				if finalquery[i+1] == 'I-arrive_time.period_of_day':
+					time_period = time_period + ' ' + originalquery[i+1]
+			except IndexError:
+				pass
+			try:
+				time_period = time_period + ' ' + originalquery[i+1]
+			except IndexError:
+				pass
 
+
+		if finalquery[i] =='B-depart_date.month_name':
+			time_spec_month = originalquery[i]
+			time_spec_month = month_converter(time_spec_month)
+
+		if finalquery[i] == 'B-depart_date.day_number':
+			time_spec_date = originalquery[i]
+			time_spec_date = w2n.word_to_num(time_spec_date)
+
+
+
+
+
+				
+
+
+
+	if time_day is not None:		
+		x = 0
+		if time_day.lower() == 'monday':
+			time_day = 0
+		elif time_day.lower() =='tuesday':
+			time_day = 1
+		elif time_day.lower() =='wednesday':
+			time_day = 2
+		elif time_day.lower() =='thursday':
+			time_day = 3
+		elif time_day.lower() =='friday':
+			time_day = 4
+		elif time_day.lower() =='saturday':
+			time_day = 5
+		elif time_day.lower() =='sunday':
+			time_day = 6
+		x = int(datetime.today().weekday()) - time_day	
+		date_after = datetime.now()+ relativedelta(days=int(x))
+		print date_after
+		par3 = date_after.strftime('%Y-%m-%d')
+	
+
+	if time_spec_month is not None:
+		if (str(time_spec_month))==1:
+			time_spec_month = '0'+str(time_spec_month)
+		par3 = '2016-'+str(time_spec_month)+'-'+str(time_spec_date)
+		print par3 
+
+
+
+		
+	 	
+
+				
 	flight_data  =  makeparameters(fromcity,tocity,par3,par4)
-	return flight_data
+	return flight_data,time_period,time_relative,time_nu
 	
 				
 
@@ -111,24 +204,7 @@ def searchterm(request):
 		finalquery = '   '.join(array)
 		#d = analysis(originalquery,array)
 		#print d
-		'''
-		fare_data = []
-		fromcity_data = []
-		tocity_data = []
-		stoppage_data = []
-		duration_data = []
-		airbrand_data = []
-		time_data = []
-
-		for i in range(0,len(d['trips']['tripOption'])):
-			fare_data.append(d['trips']['tripOption'][i]['saleTotal'])
-			for j in range(0,len(d['trips']['tripOption'][i]['slice'])):
-				fromcity_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['origin'])
-				tocity_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['destination'])
-				duration_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['duration'])
-		#print fromcity_data		
-
-		'''
+		
 		return render_to_response('search.html', {'result': (finalquery)  } )
 	else:
 		return render_to_response('search.html' ,{'result': None })
@@ -145,7 +221,6 @@ def welcome(request):
 	hotel = []
 	for line in iter(fp):
 		x = line.strip().split(',')
-		#print x[1],
 		if(x[1].strip().lower()==city.strip().lower()):
 			hotel.append(x)
 	output = hotel
@@ -175,18 +250,25 @@ def welcome(request):
 			key = dicts['labels2idx'].keys()[dicts['labels2idx'].values().index(x)]
 			array.append(key)
 		finalquery = '   '.join(array)
-		d = analysis(originalquery,array)
+		d,time_period,time_relative,time_nu = analysis(originalquery,array)
 		#print d
 		fare_data = []
 		fromcity_data = []
 		tocity_data = []
-		stoppage_data = []
+		#stoppage_data = []
 		duration_data = []
 		airbrand_data = []
-		time_data = []
+		
 		fromtime_data = []
 		totime_data = []
 
+		
+
+
+
+
+
+		
 		for i in range(0,len(d['trips']['tripOption'])):
 			fare_data.append(d['trips']['tripOption'][i]['saleTotal'])
 			dicti = d['trips']['data']['carrier']
@@ -194,20 +276,103 @@ def welcome(request):
 			for j in range(0,len(d['trips']['tripOption'][i]['slice'])):
 				fromcity_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['origin'])
 				tocity_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['destination'])
-				duration_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['duration'])
-				fromtime_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['arrivalTime'])
-				totime_data.append(d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['departureTime'])
+				duration = (d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['duration'])
+				duration =str(duration)
+				if len(duration) == 3:
+					duration = duration[0]+'H'+duration[1:]+'M'
+				elif len(duration) == 4:
+					duration = duration[0:2]+'H'+duration[2:]+'M'
+				duration_data.append(duration)	
+				 	
+				
+				m = d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['arrivalTime'].split('T')
+				m[1] = m[1][0:5]
+				m = m[0] +'   '+m[1]
+				fromtime_data.append(m)
+				n = d['trips']['tripOption'][i]['slice'][j]['segment'][0]['leg'][0]['departureTime'].split('T')
+				n[1] = n[1][0:5]
+				n = n[0] + '  '+n[1]
+				totime_data.append(n)
+
+
 				name = d['trips']['tripOption'][i]['slice'][j]['segment'][0]['flight']['carrier']
 				for x in dicti:
 					if x['code'] == name:
 						brandname = x['name']
 
 				airbrand_data.append(brandname)
+		m = -1		
+		if time_nu is not None:
+			time_nu = time_nu.split()
+			if time_nu[1] == 'pm':
+				m = int(time_nu[0])
+				m = m + 12
+			else:
+				m = int(time_nu[0])
+		flag = -1
+		if time_relative is not None:
+			if time_relative == 'after':
+				flag = 1
+			else:
+				flag = 0  
+		slot1 = -1
+		slot2 = -1
+		if time_period is not None :
+			if time_period == 'morning':
+				slot1 = 4
+				slot2 = 11
+
+			elif time_period == 'afernoon':
+				slot1 = 11
+				slot2 = 15
+
+			elif time_period == 'evening':
+				slot1 = 15
+				slot2 = 18
 
 
+			elif time_period == 'night':
+				slot1 = 18
+				slot2 = 24
+
+				
+				
+
+
+		total_data = []
+		for i in range(0,len(fare_data)):
+
+			if m > 0:
+				x = fromtime_data[i].split()
+				x = x[1].split(':')
+				if flag == 1:
+					if m >= int(x[0]):
+						tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
+				
+				elif flag == 0:
+					if m <= int(x[0]):
+						tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
+			
+			elif slot1 > 0:
+				x = fromtime_data[i].split()
+				x = x[1].split(':')
+				if  int(x[0]) < slot2:
+					tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
+			
+
+
+
+
+			else :
+				tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
+			tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
+			
+			total_data.append(tot)
 		city=city_codes.get( tocity_data[0] )
 
-		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': (finalquery), 'city': (output),  'fare_data':(fare_data) , 'fromcity_data':(fromcity_data) , 'tocity_data':(tocity_data) , 'airbrand_data':(airbrand_data) , 'duration_data':(duration_data) , 'fromtime_data':(fromtime_data) , 'totime_data':(totime_data)      })
+		
+		
+		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': (finalquery), 'total_data':(total_data)  })
 	else:
 		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': None, 'city': (output) })
 

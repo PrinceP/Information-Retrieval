@@ -38,7 +38,7 @@ def makeparameters(par1_fromcity, par2_tocity, par3_date, par4_rr):
     "passengers": {
       "adultCount": 1
     },
-    "solutions": 10,
+    "solutions": 30,
     "refundable": False
     }
   }
