@@ -6,10 +6,10 @@ from html import XHTML
 h = XHTML()
 data = {}
 
-def callCurl():
+def callCurl(city):
 	response = StringIO.StringIO()
 	c = pycurl.Curl()
-	c.setopt(c.URL, 'http://api.openweathermap.org/data/2.5/weather?q=mumbai&appid=cab609a8f21e818634dfa99354765c45')
+	c.setopt(c.URL, 'http://api.openweathermap.org/data/2.5/weather?q='+city+'&appid=cab609a8f21e818634dfa99354765c45')
 	c.setopt(c.WRITEFUNCTION, response.write)
 	c.setopt(c.HTTPHEADER, ['Content-Type: application/json','Accept-Charset: UTF-8'])
 	c.setopt(c.POSTFIELDS, '@request.json')
@@ -21,8 +21,8 @@ def callCurl():
 
 
 
-def calculateTemp():
-	temp = callCurl()
+def calculateTemp(city):
+	temp = callCurl(city)
 	json1_data = json.loads(temp)
 
 

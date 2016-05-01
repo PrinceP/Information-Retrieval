@@ -227,7 +227,7 @@ def welcome(request):
 	'''
 	Ankita Code end
 	'''
-	temp = calculateTemp()
+	temp = calculateTemp('delhi')
 	if request.POST:
 		array = []
 		finalquery = request.POST['term']
@@ -368,7 +368,16 @@ def welcome(request):
 			tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
 			
 			total_data.append(tot)
-		city=city_codes.get( tocity_data[0] )
+		
+
+
+
+
+
+
+
+		
+
 
 		
 		
