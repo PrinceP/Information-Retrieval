@@ -90,12 +90,13 @@
 
 .weatherinfo_bg {
   position: absolute;
-  top: 149px;
-  left: 235px;
+  top: 154px;
+  left: 0px;
   z-index: 4;
-  width: 163px;
+  width: 278px;
   height: 59px;
   border-bottom-right-radius: 10px;
+  border-bottom-left-radius: 10px;
   background-color: #1ab1ed;
 }
 

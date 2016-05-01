@@ -10,6 +10,8 @@ from rnnmodel import returnModel,returnDictionary,returnDictionaryOriginal
 import numpy
 from weather import calculateTemp 
 import os
+import ast, unicodedata
+import requests
 
 
 from DynamicFlight import makeparameters
@@ -159,15 +161,10 @@ def analysis(originalquery,finalquery):
 		par3 = '2016-'+str(time_spec_month)+'-'+str(time_spec_date)
 		print par3 
 
-
-
-		
-	 	
-
 				
 	flight_data  =  makeparameters(fromcity,tocity,par3,par4)
 	return flight_data,time_period,time_relative,time_nu,tocity
-	
+
 				
 
 def contextwin(l, win):
@@ -227,6 +224,59 @@ def searchterm(request):
 	else:
 		return render_to_response('search.html' ,{'result': None })
 
+'''
+	domain :
+	business : business, businessman, shopkeeper
+	student :student
+	researcher : researcher, teacher, professor, phd scholar
+
+
+
+'''
+def getDomain(profile):
+	if profile is not None:
+
+		business = ["business", "businessman", "shopkeeper"]
+		student = ["student"]
+		research = ["researcher", "teacher", "professor", "phd scholar"]
+
+		the_dict = {}
+		homeCity = ""
+		occupation = ""
+
+
+		print type(profile)
+
+		profile = unicodedata.normalize('NFKD', profile).encode('ascii','ignore')
+		profile = json.loads(profile)
+		print type(profile)
+		try:
+
+			occupation = profile['occupation']
+			homeCity = profile['placesLived'][0]['value']
+		except KeyError:
+			occupation = ''
+	
+		try:
+
+			homeCity = profile['placesLived'][0]['value']
+		except KeyError:
+			homeCity = ''
+			
+
+		if occupation in business:
+			domain = 'business'
+		elif occupation in research:
+			domain = 'research'
+		else:
+			domain = 'student'
+
+
+
+		return homeCity,occupation,domain
+	else:
+		return None,None,None
+
 
 #home page
 def welcome(request):
@@ -249,10 +299,23 @@ def welcome(request):
 	if request.POST:
 		array = []
 		finalquery = request.POST['term']
-		qu = finalquery
+
+		du = finalquery
 		finalquery = finalquery.strip()
 		finalquery = finalquery.split()
 		originalquery = finalquery
+		profile = request.POST['profile']
+		print 'here'
+		print profile
+		print len(profile)
+		if len(profile) != 0:
+			homeCity,occupation,domain = getDomain(profile)
+		else:
+			homeCity=''
+			occupation=''
+			domain=''
+		print homeCity
+
 		array = []
 		for z in finalquery:
 			try:
@@ -383,12 +446,13 @@ def welcome(request):
 			tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
 			
 			total_data.append(tot)
+
 		noflight = None	
 		if len(total_data) == 0 :
 			noflight = 1	
-		temp = calculateTemp(tocity)	
+		temp = calculateTemp(tocity)
 			
-		return render_to_response('welcome.html',{'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'noflight':(noflight) , 'result': (finalquery), 'total_data':(total_data), 'city': (output) , 'qu':(qu)  })
+		return render_to_response('welcome.html',{'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'noflight':(noflight) , 'result': (finalquery), 'total_data':(total_data), 'city': (tocity),'du':(du) })
 	
 
-	return render_to_response('welcome.html', {'temp':(None), 'humidity':(None), 'city': (None), 'qu':('Enter your query') })
+	return render_to_response('welcome.html', {'temp':(None), 'humidity':(None), 'city': (None),'du':("Enter the Query") })

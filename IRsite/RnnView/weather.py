@@ -48,6 +48,7 @@ def callCurl(city):
 
 
 
+
 def calculateTemp(city):
 	temp = callCurl(city)
 	json1_data = json.loads(temp)
