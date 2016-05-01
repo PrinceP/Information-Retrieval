@@ -7,7 +7,9 @@ city_codes = {'ahmedabad': 'AMD', 'hyderabad': 'HYD', 'pantnagar': 'PGH', 'agatt
 
 
 #AIzaSyAADjRri8mKUJwPDRMdJkXQO1Kz-0uDlWg
-api_key = "AIzaSyAIZClQC80hOArYGMBRqnPFqguTUARcQIs"
+#AIzaSyCdgEqx_9JRgXRIbrK9llY1ua0Bk0-FCNE
+#AIzaSyA5J8RyXvB4MWI48ml-Uuy7B983iJxgzcA
+api_key = "AIzaSyA5J8RyXvB4MWI48ml-Uuy7B983iJxgzcA"
 url = "https://www.googleapis.com/qpxExpress/v1/trips/search?key=" + api_key
 headers = {'content-type': 'application/json'}
 

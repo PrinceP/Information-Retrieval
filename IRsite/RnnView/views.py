@@ -249,6 +249,7 @@ def welcome(request):
 	if request.POST:
 		array = []
 		finalquery = request.POST['term']
+		qu = finalquery
 		finalquery = finalquery.strip()
 		finalquery = finalquery.split()
 		originalquery = finalquery
@@ -387,9 +388,7 @@ def welcome(request):
 			noflight = 1	
 		temp = calculateTemp(tocity)	
 			
-		return render_to_response('welcome.html',{'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'noflight':(noflight) , 'result': (finalquery), 'total_data':(total_data), 'city': (output)})
-	else:
-		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': None, 'city': (output) })
+		return render_to_response('welcome.html',{'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'noflight':(noflight) , 'result': (finalquery), 'total_data':(total_data), 'city': (output) , 'qu':(qu)  })
+	
 
-
-	return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'city': (output)})
+	return render_to_response('welcome.html', {'temp':(None), 'humidity':(None), 'city': (None), 'qu':('Enter your query') })
