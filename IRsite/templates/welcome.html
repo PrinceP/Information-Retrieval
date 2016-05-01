@@ -17,7 +17,7 @@
   <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
   <script src="static/js/jquery.js"></script>
   <script src="static/js/bootstrap.min.js"></script>
-  <script src="static/js/map.js"> </script>
+  <script src="static/js/map1.js"> </script>
   <style type="text/css">
       html, body { height: 100%; margin: 0; padding: 0; }
       #map { height: 100%; }
@@ -128,15 +128,45 @@
     </div>
     <div class="col-xs-6 clearfix pull-right">
       <dl>
-        {% for h in city %}
-          <dt>{{ h.0 }}</dt>
-          <dd> {% if h|length > 7 %}
-                  {% for i in h %}
-                          <dd>{{ h.i }}</dd>
-                  {% endfor %}
-               {% endif %}
-          </dd>
-        {% endfor %}
+        <!--
+        <dt><a href="#">Heritage Grand</a></dt>
+          {% for h in city %}
+            {% if h.7 == "Heritage Grand" %}
+            <dd>{{ h.1 }}</dd>
+            {% endif %}
+          {% endfor %}
+        <dt><a href="#">Heritage Classic</a></dt>
+          {% for h in city %}
+            {% if h.7 == "Heritage Classic" %}
+            <dd>{{ h.1 }}</dd>
+            {% endif %}
+          {% endfor %}
+        <dt><a href="#">Heritage Basic</a></dt>
+          {% for h in city %}
+            {% if h.7 == "Heritage Basic" %}
+            <dd>{{ h.1 }}</dd>
+            {% endif %}
+          {% endfor %}
+        -->
+        <dt>TEST: {{ city }}</dt>
+        <dt><a href="#">5 Star Deluxe</a></dt>
+          {% for h in city %}
+            {% if h.7 == "4 Star" %}
+            <dd>{{ h.1 }}</dd>
+            {% endif %}
+          {% endfor %}
+        <dt><a href="#">5 Star</a></dt>
+          {% for h in city %}
+            {% if h.7 == "5 Star" %}
+            <dd>{{ h.1 }}</dd>
+            {% endif %}
+          {% endfor %}
+        <dt><a href="#">4 Star (* * * *)</a></dt>
+          {% for h in city %}
+            {% if h.7 == "4 Star" %}
+            <dd>{{ h.1 }}</dd>
+            {% endif %}
+          {% endfor %}
       </dl>
       <div id="map" style="border: 2px solid black; height: 300px;">
       <script async defer

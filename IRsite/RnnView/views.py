@@ -19,6 +19,15 @@ rnn = returnModel()
 dicts_words = returnDictionary()
 dicts = returnDictionaryOriginal()
 
+#Ankita Code
+code_city = {}
+
+for city in city_codes:
+	code = city_codes[city]
+	code_city[code] = city
+
+#Ankita Code
+
 import time
 from datetime import datetime
 from dateutil.relativedelta import relativedelta
@@ -215,13 +224,13 @@ def welcome(request):
 	'''
 	Ankita Code begin
 	'''
-	city = 'delhi'
-	path = '../data/HotelTourismData-3/Sheet1-Table_1_append.csv'
+	city = 'Delhi'
+	path = '../data/HotelTourismData-3/Sheet1-Table_1_append32.csv'
 	fp = open(path,'r')
 	hotel = []
 	for line in iter(fp):
 		x = line.strip().split(',')
-		if(x[1].strip().lower()==city.strip().lower()):
+		if(x[0].strip().lower()==city.strip().lower()):
 			hotel.append(x)
 	output = hotel
 	'''
@@ -262,13 +271,6 @@ def welcome(request):
 		fromtime_data = []
 		totime_data = []
 
-		
-
-
-
-
-
-		
 		for i in range(0,len(d['trips']['tripOption'])):
 			fare_data.append(d['trips']['tripOption'][i]['saleTotal'])
 			dicti = d['trips']['data']['carrier']
@@ -358,11 +360,6 @@ def welcome(request):
 				x = x[1].split(':')
 				if  int(x[0]) < slot2:
 					tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
-			
-
-
-
-
 			else :
 				tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
 			tot = {'fare':fare_data[i], 'from':fromcity_data[i] , 'to':tocity_data[i] , 'brand':airbrand_data[i] , 'duration':duration_data[i] , 'starttime':fromtime_data[i] , 'endtime': totime_data[i] }
@@ -379,9 +376,10 @@ def welcome(request):
 		
 
 
+		output = code_city[tocity_data[0]]
+		print output
 		
-		
-		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': (finalquery), 'total_data':(total_data)  })
+		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': (finalquery), 'total_data':(total_data), 'city': (output)})
 	else:
 		return render_to_response('welcome.html', {'temp':(temp["temp"]), 'humidity':(temp["humidity"]), 'result': None, 'city': (output) })
 
