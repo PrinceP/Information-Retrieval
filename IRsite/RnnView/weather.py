@@ -25,6 +25,12 @@ def is_connected():
 print is_connected()
 
 def callCurl(city):
+	city = city.split()
+	if len(city) > 1:
+		city = city[1]
+	else:
+		city = city[0]
+		
 	if is_connected():
 		response = StringIO.StringIO()
 		c = pycurl.Curl()

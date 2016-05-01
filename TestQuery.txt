@@ -7,7 +7,8 @@ please give me the prices for all flights from mumbai to bangalore airport next 
 what is the least expensive flight today from mumbai to jaipur  
 i need a flight delta airlines delhi to jaipur  
 
-show me flights going from delhi to bangalore arriving on wednesday morning  
+show me flights going from delhi to bangalore arriving on wednesday morning
+show me the flights from bangalore to  delhi on tomorrow  
 show me flights leaving from bangalore  to  delhi  on wednesday  
 show me flights leaving from bangalore  to  delhi  on wednesday after 7 pm 
 

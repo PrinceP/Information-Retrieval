@@ -1,333 +1,234 @@
 <!doctype html>
 <html>
+
 <head>
-
-  <meta charset="utf-8">
-  <meta name="viewport" content="initial-scale=1.0">
-  <meta name="google-signin-client_id" content="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com">
-
-  <meta name="google-signin-scope" content="profile email">
-  <meta name="google-signin-client_id" content="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com">
-  <script src="https://apis.google.com/js/platform.js" async defer></script>
-  <title>Personalised Travel Search</title>
-  <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700,inherit,400" rel="stylesheet" type="text/css">
-  <link rel="stylesheet" href="static/css/standardize.css">
-  <link rel="stylesheet" href="static/css/index.css">
-  <link rel="stylesheet" href="static/css/bootstrap.min.css">
-  <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
-  <script src="static/js/jquery.js"></script>
-  <script src="static/js/bootstrap.min.js"></script>
-  <script src="static/js/map.js"> </script>
-  <script src = "https://plus.google.com/js/client:platform.js" async defer></script>
-  <script src="static/js/map1.js"> </script>
-  <style type="text/css">
-      html, body { height: 100%; margin: 0; padding: 0; }
-      #map { height: 100%; }
-      .classCentred {
-        border: 2px solid black;
-        height: 200px; 
-        width: 100%; text-align:center; padding-top: 100px; left: 50%; margin-right: -50%;
-      }
- </style>
- <style type="text/css">
-  .container1 {
-    /*position:relative;*/
-    overflow: scroll;
-    height: 200px;
-  }
-  .row1 {clear: both;}
-  .row1 div {
-    float: left; 
-    width: 75px; 
-    margin-bottom: 20px
-  }
-
-  .header1 .row1{ /*position: fixed;*/ 
-    background: #E0D8E0;
-  }
-  .table1 { 
-    /*height: 100px; */
-    
-  }
-
-
- </style>
-
-</head>
-<body>
-<div class="container" style="margin:auto auto;">
-  <div class="row pull-right" style="padding:10px;">
-
-
-  <!-- <div class="g-signin2" data-onsuccess="onSignIn" data-theme="dark"></div>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta name="google-signin-client_id" content="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com">
+    <meta name="google-signin-scope" content="profile email">
+    <meta name="google-signin-client_id" content="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com">
     <script src="https://apis.google.com/js/platform.js" async defer></script>
-    <a href="#" onclick="signOut();">Sign out</a>
-  </div> -->
+    <title>Personalised Travel Search</title>
+    <link href="http://fonts.googleapis.com/css?family=Montserrat:400,700,inherit,400" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="static/css/standardize.css">
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="static/css/bootstrap.min.css">
+    <script src="https://cdn.firebase.com/js/client/2.2.1/firebase.js"></script>
+    <script src="static/js/jquery.js"></script>
+    <script src="static/js/bootstrap.min.js"></script>
+    <script src="static/js/map.js">
+    </script>
+    <script src="https://plus.google.com/js/client:platform.js" async defer></script>
+    <script src="static/js/map1.js">
+    </script>
+    <style type="text/css">
+        html,
+        body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+        }
+        #map {
+            height: 100%;
+        }
+        .classCentred {
+            border: 2px solid black;
+            height: 200px;
+            width: 100%;
+            text-align: center;
+            padding-top: 100px;
+            left: 50%;
+            margin-right: -50%;
+        }
+    </style>
+</head>
 
-
-  <div id="gConnect" class="button">
-    <button class="g-signin"
-        data-scope = "email"; 
-        data-clientid="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com"
-        data-callback="signInCallback"
-        data-theme="dark"
-        data-cookiepolicy="single_host_origin">
-    </button>
-  </div>
-
-  <div id="gLogout" style="display:none">
-    <button type = "button" class = "btn btn-danger" onclick="signOut();">sign out</button>
-    <!-- <a class="btn-success" href="#" onclick="signOut();">Logout</a> -->
-  </div>
-
-</div>
-
-  <div class="row ">
-    <form role="form" action="/" method="post">
-      <div class="form-group" >
-        <input type="text" class="form-control" name="term" id="exampleInputName2" placeholder="Spoken Language Query" />
-        <input type="hidden" name="profile" id="userprofile" value=""/>
-      </div>
-      </form>
-
-  </div>      
-    <div class="row flightresult" >
-      <!-- For the list of Flights-->
-      {% if total_data %}
-      <div class="container1">
-        <table class="table table-hover">
-        <div class="header1">
-          <thead>
-          <div class="row1">
-          <tr>
-          <th> <b>Fares</b></th>
-          <th> Airports</th>
-          <th> Airway</th>
-          <th> Start</th>
-          <th> End</th>
-          </tr>
-          </div> 
-          </thead>
+<body>
+    <div class="container" style="margin:auto auto;">
+        <div class="row pull-right" style="padding:10px;">
+            <div id="gConnect" class="button">
+                <button class="g-signin" data-scope="email" ; data-clientid="1028299755029-214297fnh7stdg4cc2jhuam8b4lkhdlv.apps.googleusercontent.com" data-callback="signInCallback" data-theme="dark" data-cookiepolicy="single_host_origin">
+                </button>
+            </div>
+            <div id="gLogout" style="display:none">
+                <button type="button" class="btn btn-danger" onclick="signOut();">sign out</button>
+                <!-- <a class="btn-success" href="#" onclick="signOut();">Logout</a> -->
+            </div>
         </div>
-        <div class="table1">
-       {% for item in total_data %}
-      
-        <tbody>
-          <div class="row1">
-          {% if item %}
-          <tr>
-          <td>{{ item.fare }}</td>
-          <td>{{ item.from }} - {{ item.to }}</td>
-          <td>{{ item.brand }}</td>
-          <td>{{ item.endtime }}</td>
-          <td>{{ item.starttime }}</td>
-          </tr>
-          </div>
-          {% endif %}
-      </tbody>
-      {% endfor %}
-      </div>
-      </table>
-      {% endif  %}
-      </div>
-            
-      </div>
-      
-
-
-
-
-
-
-  <div class="row" classCentred style="padding-top:30px;">
-    <div class="col-xs-5 clearfix weatherbody" style="height:210px;width:50%; background: white">
-      <div class="weathercontainer" style="height: 210px ; width: 50%">
-        <p class="weatherlocation">{{ city }}</p>
-        <p class="weathertemperature">{{ temp }}</p>
-        <!-- <div class="weatherclimate_bg"><img class="weatherdropicon" src="static/images/Sun.svg"></div> -->
-        <div class="weatherinfo_bg">
-          <img class="weatherdropicon" src="static/images/Droplet.svg">
-          <p class="weatherhumidity">{{humidity}}</p>
-
-          <img class="weatherwindicon" src="static/images/Wind.svg">
-          <div class="weatherwindspeed"></div>
-          </div>
-      </div>
+        <div class="row ">
+            <form role="form" action="/" method="post">
+                <div class="form-group">
+                    <input type="text" class="form-control" name="term" id="exampleInputName2" placeholder="Spoken Language Query" />
+                    <input type="hidden" name="profile" id="userprofile" value="{{  du }}" />
+                </div>
+            </form>
+        </div>
+        <!-- For the list of Flights-->
+        <div class="row">
+            <div class="result" style="height:210px;overflow:scroll;">
+                {% if noflight %}
+                <br/>
+                <p style="text-align: center;"><b>No FLIGHTS !!!! Sorry</b>
+                </p>
+                <br/> {% endif %} {% if total_data %}
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th> Fares</th>
+                            <th> Airports</th>
+                            <th> Airway</th>
+                            <th> Start</th>
+                            <th> End</th>
+                        </tr>
+                    </thead>
+                    {% for item in total_data %}
+                    <tbody>
+                        {% if item %}
+                        <tr>
+                            <td>{{ item.fare }}</td>
+                            <td>{{ item.from }} - {{ item.to }}</td>
+                            <td>{{ item.brand }}</td>
+                            <td>{{ item.endtime }}</td>
+                            <td>{{ item.starttime }}</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                    {% endfor %}
+                </table>
+                {% endif %}
+            </div>
+        </div>
+        {% if temp %}
+        <div class="row" classCentred style="padding-top:30px;">
+            <div class="col-xs-2 clearfix weatherbody" style="height:210px;width:50%;background: white;margin-top: 106px;">
+                <div class="weathercontainer" style="height: 210px ; width: 50%;margin-left:-20px;">
+                    <p class="weatherlocation">{{ city }}</p>
+                    <p class="weathertemperature">{{ temp }}</p>
+                    <!-- <div class="weatherclimate_bg"><img class="weatherdropicon" src="static/images/Sun.svg"></div> -->
+                    <div class="weatherinfo_bg">
+                        <img class="weatherdropicon" src="static/images/Droplet.svg">
+                        <p class="weatherhumidity">{{humidity}}</p>
+                        <img class="weatherwindicon" src="static/images/Wind.svg">
+                        <div class="weatherwindspeed"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-6 clearfix pull-right">
+                <dl>
+                    <!--
+            <dt><a href="#">Heritage Grand</a></dt>
+              {% for h in city %}
+                {% if h.7 == "Heritage Grand" %}
+                <dd>{{ h.1 }}</dd>
+                {% endif %}
+              {% endfor %}
+            <dt><a href="#">Heritage Classic</a></dt>
+              {% for h in city %}
+                {% if h.7 == "Heritage Classic" %}
+                <dd>{{ h.1 }}</dd>
+                {% endif %}
+              {% endfor %}
+            <dt><a href="#">Heritage Basic</a></dt>
+              {% for h in city %}
+                {% if h.7 == "Heritage Basic" %}
+                <dd>{{ h.1 }}</dd>
+                {% endif %}
+              {% endfor %}
+            -->
+                    <dt>TEST: {{ city }}</dt>
+                    <dt><a href="#">5 Star Deluxe</a></dt> {% for h in city %} {% if h.7 == "4 Star" %}
+                    <dd>{{ h.1 }}</dd>
+                    {% endif %} {% endfor %}
+                    <dt><a href="#">5 Star</a></dt> {% for h in city %} {% if h.7 == "5 Star" %}
+                    <dd>{{ h.1 }}</dd>
+                    {% endif %} {% endfor %}
+                    <dt><a href="#">4 Star (* * * *)</a></dt> {% for h in city %} {% if h.7 == "4 Star" %}
+                    <dd>{{ h.1 }}</dd>
+                    {% endif %} {% endfor %}
+                </dl>
+                <div id="map" style="border: 2px solid black; height: 300px;">
+                    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSjtspJA69v6m_8yfqcUE7f5zQa8baTwY&libraries=visualization&callback=initMap">
+                    </script>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-xs-6 clearfix pull-right">
-      <dl>
-        <!--
-        <dt><a href="#">Heritage Grand</a></dt>
-          {% for h in city %}
-            {% if h.7 == "Heritage Grand" %}
-            <dd>{{ h.1 }}</dd>
-            {% endif %}
-          {% endfor %}
-        <dt><a href="#">Heritage Classic</a></dt>
-          {% for h in city %}
-            {% if h.7 == "Heritage Classic" %}
-            <dd>{{ h.1 }}</dd>
-            {% endif %}
-          {% endfor %}
-        <dt><a href="#">Heritage Basic</a></dt>
-          {% for h in city %}
-            {% if h.7 == "Heritage Basic" %}
-            <dd>{{ h.1 }}</dd>
-            {% endif %}
-          {% endfor %}
-        -->
-        <dt>TEST: {{ city }}</dt>
-        <dt><a href="#">5 Star Deluxe</a></dt>
-          {% for h in city %}
-            {% if h.7 == "4 Star" %}
-            <dd>{{ h.1 }}</dd>
-            {% endif %}
-          {% endfor %}
-        <dt><a href="#">5 Star</a></dt>
-          {% for h in city %}
-            {% if h.7 == "5 Star" %}
-            <dd>{{ h.1 }}</dd>
-            {% endif %}
-          {% endfor %}
-        <dt><a href="#">4 Star (* * * *)</a></dt>
-          {% for h in city %}
-            {% if h.7 == "4 Star" %}
-            <dd>{{ h.1 }}</dd>
-            {% endif %}
-          {% endfor %}
-      </dl>
-      <div id="map" style="border: 2px solid black; height: 300px;">
-      <script async defer
-          src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDSjtspJA69v6m_8yfqcUE7f5zQa8baTwY
-          &libraries=visualization&callback=initMap">
-      </script>
-      </div>
-    </div>
-  </div>
-</div>
+    {% endif %}
 </body>
-</html>
 
+</html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.simpleWeather/3.0.2/jquery.simpleWeather.min.js"></script>
-
 <script type="text/javascript">
-var respObj;
-function onSignIn(googleUser) {
-  var profile = googleUser.getBasicProfile();
-  // console.log(profile)
-  console.log('ID: ' + profile.getId()); // Do not send to your backend! Use an ID token instead.
-  console.log('Name: ' + profile.getName());
-  console.log('Image URL: ' + profile.getImageUrl());
-  console.log('Email: ' + profile.getEmail());
-  console.log('Full Name: ' + profile.getName());
-  console.log('Given Name: ' + profile.getGivenName());
-  console.log('Family Name: ' + profile.getFamilyName());
-  var id_token = googleUser.getAuthResponse().id_token;
-  console.log("ID Token: " + id_token);
-  // console.log(profile);
-}
+    var respObj;
+    function signInCallback(resp) {
+        respObj = resp;
+        if (resp["status"]["google_logged_in"] && resp["status"]["method"] == "PROMPT") {
+            console.log("logged in with prompt mode");
+            $("#gConnect").hide();
+            $("#gLogout").show();
 
-
-function signInCallback(resp) {
-    respObj = resp;
-    if (resp["status"]["google_logged_in"] && resp["status"]["method"] == "PROMPT") {
-      console.log("logged in with prompt mode");
-      $("#gConnect").hide();
-      $("#gLogout").show();
-
-    } else if (resp["status"]["google_logged_in"] && resp["status"]["method"] == "AUTO") {
-      console.log("logged in with auto mode");
-      $("#gConnect").hide();
-      $("#gLogout").show();
-    } else {
-      console.log("not logged in");
-      $("#gConnect").show();
-      $("#gLogout").hide();
+        } else if (resp["status"]["google_logged_in"] && resp["status"]["method"] == "AUTO") {
+            console.log("logged in with auto mode");
+            $("#gConnect").hide();
+            $("#gLogout").show();
+        } else {
+            console.log("not logged in");
+            $("#gConnect").show();
+            $("#gLogout").hide();
+        }
+        gapi.client.load('plus', 'v1', apiClientLoaded);
     }
-    gapi.client.load('plus', 'v1', apiClientLoaded);
-    
-    // if (resp['status']['signed_in'] && resp['status']['method'] == 'PROMPT') {
-    //   // User clicked on the sign in button. Do your staff here.
-    //   console.log("logged in");
-    // } else if (resp['status']['signed_in']) {
-    //   console.log("handle this case")
-    //     // This is called when user is signed in to Google but hasn't clicked on the button.
-    // } else {
-    //     console.log('Sign-in state: ' + resp['error']);
-    // }
-}
 
-function apiClientLoaded() {
-  console.log("apiClientLoaded");
-    gapi.client.plus.people.get({userId: 'me'}).execute(handleEmailResponse);
-}
-
-function handleEmailResponse(resp) {
-    var primaryEmail;
-    // JSON.stringify(resp);
-    if(respObj['status']['signed_in']) {
-      
-      $("#userprofile").val(JSON.stringify(resp));
-      console.log(JSON.stringify(resp))
-      // writeToFile(JSON.stringify(resp));
+    function apiClientLoaded() {
+        console.log("apiClientLoaded");
+        gapi.client.plus.people.get({
+            userId: 'me'
+        }).execute(handleEmailResponse);
     }
-    
-}
 
-function signOut() {
-    // gapi.auth.signOut();
-    $.ajax({
-      type: 'GET',
-      url: 'https://accounts.google.com/o/oauth2/revoke?token=' +
-          gapi.auth.getToken().access_token,
-      async: false,
-      contentType: 'application/json',
-      dataType: 'jsonp',
-      success: function(result) {
-        console.log('revoke response: ' + result);
-        $('#authOps').hide();
-        $('#profile').empty();
-        $('#visiblePeople').empty();
-        $('#authResult').empty();
-        $('#gConnect').show();
-      },
-      error: function(e) {
-        console.log(e);
-      }
-  });
-  $("#gConnect").show();
-  $("#gLogout").hide();  
-}
+    function handleEmailResponse(resp) {
+        var primaryEmail;
+        // JSON.stringify(resp);
+        if (respObj['status']['signed_in']) {
+
+            $("#userprofile").val(JSON.stringify(resp));
+            console.log(JSON.stringify(resp))
+        }
+
+    }
+
+    function signOut() {
+        $.ajax({
+            type: 'GET',
+            url: 'https://accounts.google.com/o/oauth2/revoke?token=' +
+                gapi.auth.getToken().access_token,
+            async: false,
+            contentType: 'application/json',
+            dataType: 'jsonp',
+            success: function(result) {
+                console.log('revoke response: ' + result);
+                $('#authOps').hide();
+                $('#profile').empty();
+                $('#visiblePeople').empty();
+                $('#authResult').empty();
+                $('#gConnect').show();
+            },
+            error: function(e) {
+                console.log(e);
+            }
+        });
+        $("#gConnect").show();
+        $("#gLogout").hide();
+    }
 
 
-function writeToFile(resp) {
-  console.log(resp);
-
-  // $.ajax({
-  //     url: "/static/ajaxpost.py",
-  //     type: "POST",
-  //     datatype: "json",
-  //     cache: 'false',
-  //     async: 'true',
-  //     data: {foo: 'bar', bar: 'foo'},
-  //     // data: {'resp':resp},
-  //     success: function(response){
-  //         console.log("success");
-  //         console.log(response);
-  //     },
-  //     error: function(response) {
-  //         console.log("error");
-  //         console.log(response);
-  //     }                                                         
-  // });
-}
+    function writeToFile(resp) {
+        console.log(resp);
+    }
 </script>
 <script type="text/javascript">
-  $('.table > tbody > tr').click(function() {
-  window.open("http://makemytrip.com", '_blank');
-  });
-    
+    $('.table > tbody > tr').click(function() {
+        window.open("http://makemytrip.com", '_blank');
+    });
 </script>
-
-
